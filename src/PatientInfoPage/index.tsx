@@ -5,7 +5,7 @@ import { Icon } from 'semantic-ui-react';
 
 import { Patient } from '../types';
 import { apiBaseUrl } from '../constants';
-import { useStateValue } from '../state';
+import { useStateValue, updatePatientInfo } from '../state';
 
 const PatientInfoPage: React.FC = () => {
   const [{ patients }, dispatch] = useStateValue();
@@ -19,7 +19,7 @@ const PatientInfoPage: React.FC = () => {
         const { data: patientInfoFromApi } = await axios.get<Patient>(
           `${apiBaseUrl}/patients/${id}`
         );
-        dispatch({ type: 'UPDATE_PATIENT_INFO', payload: patientInfoFromApi });
+        dispatch(updatePatientInfo(patientInfoFromApi));
       } catch (e) {
         console.error(e);
       }
