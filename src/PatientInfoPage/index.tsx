@@ -1,7 +1,7 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import { Icon } from 'semantic-ui-react';
+import { Icon, List } from 'semantic-ui-react';
 
 import { Patient } from '../types';
 import { apiBaseUrl } from '../constants';
@@ -24,10 +24,10 @@ const PatientInfoPage: React.FC = () => {
         console.error(e);
       }
     };
-    if (patient && !patients[id].ssn) {
+    if (patient && !patient.ssn) {
       fetchPatientInfo();
     }
-  }, [id, dispatch, patients]);
+  }, [id, dispatch, patient]);
 
   if (!patient || !patient.ssn) return null;
 
@@ -47,6 +47,21 @@ const PatientInfoPage: React.FC = () => {
       </h2>
       <p>{patient.ssn}</p>
       <p>{patient.occupation}</p>
+      <h3>entries</h3>
+      {patient.entries.map(entry => {
+        return (
+          <React.Fragment key={entry.id}>
+            <p>{`${entry.date}: ${entry.description}`}</p>
+            {entry.diagnosisCodes && (
+              <List bulleted>
+                {entry.diagnosisCodes.map(code => (
+                  <List.Item key={code}>{code}</List.Item>
+                ))}
+              </List>
+            )}
+          </React.Fragment>
+        );
+      })}
     </div>
   );
 };
