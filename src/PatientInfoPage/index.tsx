@@ -8,7 +8,7 @@ import { apiBaseUrl } from '../constants';
 import { useStateValue, updatePatientInfo } from '../state';
 
 const PatientInfoPage: React.FC = () => {
-  const [{ patients }, dispatch] = useStateValue();
+  const [{ patients, diagnoses }, dispatch] = useStateValue();
 
   const { id } = useParams<{ id: string }>();
   const patient = patients[id];
@@ -55,7 +55,9 @@ const PatientInfoPage: React.FC = () => {
             {entry.diagnosisCodes && (
               <List bulleted>
                 {entry.diagnosisCodes.map(code => (
-                  <List.Item key={code}>{code}</List.Item>
+                  <List.Item key={code}>
+                    {code} {diagnoses[code].name}
+                  </List.Item>
                 ))}
               </List>
             )}
