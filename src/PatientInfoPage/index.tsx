@@ -1,14 +1,15 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import { Icon, List } from 'semantic-ui-react';
+import { Icon } from 'semantic-ui-react';
 
+import EntryDetails from '../components/EntryDeatils';
 import { Patient } from '../types';
 import { apiBaseUrl } from '../constants';
 import { useStateValue, updatePatientInfo } from '../state';
 
 const PatientInfoPage: React.FC = () => {
-  const [{ patients, diagnoses }, dispatch] = useStateValue();
+  const [{ patients }, dispatch] = useStateValue();
 
   const { id } = useParams<{ id: string }>();
   const patient = patients[id];
@@ -51,16 +52,7 @@ const PatientInfoPage: React.FC = () => {
       {patient.entries.map(entry => {
         return (
           <React.Fragment key={entry.id}>
-            <p>{`${entry.date}: ${entry.description}`}</p>
-            {entry.diagnosisCodes && (
-              <List bulleted>
-                {entry.diagnosisCodes.map(code => (
-                  <List.Item key={code}>
-                    {code} {diagnoses[code].name}
-                  </List.Item>
-                ))}
-              </List>
-            )}
+            <EntryDetails entry={entry} />
           </React.Fragment>
         );
       })}
