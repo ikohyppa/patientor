@@ -62,7 +62,14 @@ export type Entry =
   | OccupationalHealthcareEntry
   | HealthCheckEntry;
 
-export type EntryFormValues = Omit<Entry, 'id'>;
+export interface EntryFormValues {
+  type: string;
+  description: string;
+  date: string;
+  specialist: string;
+  diagnosisCodes?: Array<Diagnosis['code']>;
+  discharge: Discharge;
+}
 
 export interface Patient {
   id: string;

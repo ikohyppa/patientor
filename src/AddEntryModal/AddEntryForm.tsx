@@ -5,6 +5,7 @@ import { Field, Formik, Form } from 'formik';
 import { DiagnosisSelection, TextField } from '../AddPatientModal/FormField';
 import { EntryFormValues } from '../types';
 import { useStateValue } from '../state';
+import * as Validator from './validators';
 
 interface Props {
   onSubmit: (values: EntryFormValues) => void;
@@ -37,24 +38,21 @@ export const EntryForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
               placeholder='Description'
               name='description'
               component={TextField}
+              validate={Validator.required}
             />
             <Field
               label='Date'
               placeholder='YYYY-MM-DD'
               name='date'
               component={TextField}
+              validate={Validator.date}
             />
             <Field
               label='Specialist'
               placeholder='Specialist'
               name='specialist'
               component={TextField}
-            />
-            <Field
-              label='Discharge date'
-              placeholder='YYYY-MM-DD'
-              name='discharge.date'
-              component={TextField}
+              validate={Validator.required}
             />
             <DiagnosisSelection
               setFieldValue={setFieldValue}
@@ -62,10 +60,18 @@ export const EntryForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
               diagnoses={Object.values(diagnoses)}
             />
             <Field
+              label='Discharge date'
+              placeholder='YYYY-MM-DD'
+              name='discharge.date'
+              component={TextField}
+              validate={Validator.date}
+            />
+            <Field
               label='Discharge criteria'
               placeholder='Criteria'
               name='discharge.criteria'
               component={TextField}
+              validate={Validator.required}
             />
             <Grid>
               <Grid.Column floated='left' width={5}>
