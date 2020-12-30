@@ -71,6 +71,7 @@ export interface EntryFormValues {
   discharge?: Discharge;
   employerName?: string;
   sickLeave?: SickLeave;
+  healthCheckRating?: HealthCheckRating;
 }
 
 export interface Patient {

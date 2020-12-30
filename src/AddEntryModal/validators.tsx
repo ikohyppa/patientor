@@ -8,6 +8,14 @@ export const required = (value: string) => {
   }
 };
 
+export const requiredWithZero = (value: number) => {
+  let error;
+  if (value !== 0 && !value) {
+    error = 'Field is required';
+    return error;
+  }
+};
+
 export const dateRequired = (value: string) => {
   let error;
   if (!value) {

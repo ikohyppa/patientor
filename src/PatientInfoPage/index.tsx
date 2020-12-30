@@ -91,7 +91,7 @@ const PatientInfoPage: React.FC = () => {
         );
       })}
       <div style={buttonStyle}>
-        <Button onClick={openModal}>New Hospital Entry</Button>
+        <Button onClick={openModal}>Add new entry</Button>
       </div>
       <AddEntryModal
         modalOpen={modalOpen}

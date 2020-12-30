@@ -2,7 +2,11 @@ import React from 'react';
 import { Grid, Button } from 'semantic-ui-react';
 import { Field, Formik, Form } from 'formik';
 
-import { DiagnosisSelection, TextField } from '../AddPatientModal/FormField';
+import {
+  DiagnosisSelection,
+  NumberField,
+  TextField,
+} from '../AddPatientModal/FormField';
 import { SelectType, TypeOption } from './TypeSelector';
 import { EntryFormValues, Type } from '../types';
 import { useStateValue } from '../state';
@@ -39,29 +43,30 @@ export const EntryForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
           startDate: '',
           endDate: '',
         },
+        healthCheckRating: 0,
       }}
       onSubmit={onSubmit}
     >
       {({ values, isValid, dirty, setFieldValue, setFieldTouched }) => {
         return (
           <Form className='form ui'>
-            <SelectType label='Type' name='type' options={typeOptions} />
+            <SelectType label='Type *' name='type' options={typeOptions} />
             <Field
-              label='Description'
+              label='Description *'
               placeholder='Description'
               name='description'
               component={TextField}
               validate={Validator.required}
             />
             <Field
-              label='Date'
+              label='Date *'
               placeholder='YYYY-MM-DD'
               name='date'
               component={TextField}
               validate={Validator.dateRequired}
             />
             <Field
-              label='Specialist'
+              label='Specialist *'
               placeholder='Specialist'
               name='specialist'
               component={TextField}
@@ -75,14 +80,14 @@ export const EntryForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
             {values.type === Type.Hospital && (
               <>
                 <Field
-                  label='Discharge date'
+                  label='Discharge date *'
                   placeholder='YYYY-MM-DD'
                   name='discharge.date'
                   component={TextField}
                   validate={Validator.dateRequired}
                 />
                 <Field
-                  label='Discharge criteria'
+                  label='Discharge criteria *'
                   placeholder='Criteria'
                   name='discharge.criteria'
                   component={TextField}
@@ -93,7 +98,7 @@ export const EntryForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
             {values.type === Type.OccupationalHealthcare && (
               <>
                 <Field
-                  label='Employer name'
+                  label='Employer name *'
                   placeholder='Employer name'
                   name='employerName'
                   component={TextField}
@@ -114,6 +119,16 @@ export const EntryForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
                   validate={Validator.date}
                 />
               </>
+            )}
+            {values.type === Type.HealthCheck && (
+              <Field
+                label='Health check rating'
+                name='healthCheckRating'
+                component={NumberField}
+                min={0}
+                max={3}
+                validate={Validator.requiredWithZero}
+              />
             )}
             <Grid>
               <Grid.Column floated='left' width={5}>

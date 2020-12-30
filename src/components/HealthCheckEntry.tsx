@@ -44,7 +44,7 @@ const HealthCheckEntryDetails: React.FC<{ entry: HealthCheckEntry }> = ({
         )}
         <h3>description:</h3>
         <p>{entry.description}</p>
-        <h3>healt rating:</h3>
+        <h3>health rating:</h3>
         <p>
           <Icon name='heart' color={healthColor()} />
         </p>
