@@ -4,6 +4,12 @@ export interface Diagnosis {
   latin?: string;
 }
 
+export enum Type {
+  Hospital = 'Hospital',
+  OccupationalHealthcare = 'OccupationalHealthcare',
+  HealthCheck = 'HealthCheck',
+}
+
 export enum Gender {
   Male = 'male',
   Female = 'female',
@@ -55,6 +61,8 @@ export type Entry =
   | HospitalEntry
   | OccupationalHealthcareEntry
   | HealthCheckEntry;
+
+export type EntryFormValues = Omit<Entry, 'id'>;
 
 export interface Patient {
   id: string;

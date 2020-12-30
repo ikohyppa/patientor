@@ -1,18 +1,38 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import { Icon } from 'semantic-ui-react';
+import { Button, Icon } from 'semantic-ui-react';
 
+import { AddEntryModal } from '../AddEntryModal';
 import EntryDetails from '../components/EntryDeatils';
-import { Patient } from '../types';
+import { Entry, EntryFormValues, Patient } from '../types';
 import { apiBaseUrl } from '../constants';
-import { useStateValue, updatePatientInfo } from '../state';
+import { addEntry, updatePatientInfo, useStateValue } from '../state';
 
 const PatientInfoPage: React.FC = () => {
   const [{ patients }, dispatch] = useStateValue();
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [error, setError] = useState<string | undefined>();
 
   const { id } = useParams<{ id: string }>();
   const patient = patients[id];
+
+  //type EntryFormValues = Omit<Entry, 'id'>;
+
+  const buttonStyle = {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    padding: '0 0 30px 0',
+  };
+
+  const openModal = (): void => {
+    setModalOpen(true);
+  };
+
+  const closeModal = (): void => {
+    setModalOpen(false);
+    setError(undefined);
+  };
 
   React.useEffect(() => {
     const fetchPatientInfo = async () => {
@@ -40,6 +60,20 @@ const PatientInfoPage: React.FC = () => {
     }
   };
 
+  const submitEntry = async (values: EntryFormValues) => {
+    try {
+      const { data: newEntry } = await axios.post<Entry>(
+        `${apiBaseUrl}/patients/${id}/entries`,
+        values
+      );
+      dispatch(addEntry(id, newEntry));
+      closeModal();
+    } catch (e) {
+      console.error(e.response.data);
+      setError(e.response.data.error);
+    }
+  };
+
   return (
     <div className='App'>
       <h2>
@@ -56,6 +90,15 @@ const PatientInfoPage: React.FC = () => {
           </React.Fragment>
         );
       })}
+      <div style={buttonStyle}>
+        <Button onClick={openModal}>New Hospital Entry</Button>
+      </div>
+      <AddEntryModal
+        modalOpen={modalOpen}
+        onSubmit={submitEntry}
+        error={error}
+        onClose={closeModal}
+      />
     </div>
   );
 };
