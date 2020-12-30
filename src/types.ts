@@ -68,7 +68,9 @@ export interface EntryFormValues {
   date: string;
   specialist: string;
   diagnosisCodes?: Array<Diagnosis['code']>;
-  discharge: Discharge;
+  discharge?: Discharge;
+  employerName?: string;
+  sickLeave?: SickLeave;
 }
 
 export interface Patient {

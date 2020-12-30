@@ -3,7 +3,8 @@ import { Grid, Button } from 'semantic-ui-react';
 import { Field, Formik, Form } from 'formik';
 
 import { DiagnosisSelection, TextField } from '../AddPatientModal/FormField';
-import { EntryFormValues } from '../types';
+import { SelectType, TypeOption } from './TypeSelector';
+import { EntryFormValues, Type } from '../types';
 import { useStateValue } from '../state';
 import * as Validator from './validators';
 
@@ -11,6 +12,12 @@ interface Props {
   onSubmit: (values: EntryFormValues) => void;
   onCancel: () => void;
 }
+
+const typeOptions: TypeOption[] = [
+  { value: Type.Hospital, label: Type.Hospital },
+  { value: Type.OccupationalHealthcare, label: Type.OccupationalHealthcare },
+  { value: Type.HealthCheck, label: Type.HealthCheck },
+];
 
 export const EntryForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
   const [{ diagnoses }] = useStateValue();
@@ -27,12 +34,18 @@ export const EntryForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
           date: '',
           criteria: '',
         },
+        employerName: '',
+        sickLeave: {
+          startDate: '',
+          endDate: '',
+        },
       }}
       onSubmit={onSubmit}
     >
-      {({ isValid, dirty, setFieldValue, setFieldTouched }) => {
+      {({ values, isValid, dirty, setFieldValue, setFieldTouched }) => {
         return (
           <Form className='form ui'>
+            <SelectType label='Type' name='type' options={typeOptions} />
             <Field
               label='Description'
               placeholder='Description'
@@ -45,7 +58,7 @@ export const EntryForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
               placeholder='YYYY-MM-DD'
               name='date'
               component={TextField}
-              validate={Validator.date}
+              validate={Validator.dateRequired}
             />
             <Field
               label='Specialist'
@@ -59,20 +72,49 @@ export const EntryForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
               setFieldTouched={setFieldTouched}
               diagnoses={Object.values(diagnoses)}
             />
-            <Field
-              label='Discharge date'
-              placeholder='YYYY-MM-DD'
-              name='discharge.date'
-              component={TextField}
-              validate={Validator.date}
-            />
-            <Field
-              label='Discharge criteria'
-              placeholder='Criteria'
-              name='discharge.criteria'
-              component={TextField}
-              validate={Validator.required}
-            />
+            {values.type === Type.Hospital && (
+              <>
+                <Field
+                  label='Discharge date'
+                  placeholder='YYYY-MM-DD'
+                  name='discharge.date'
+                  component={TextField}
+                  validate={Validator.dateRequired}
+                />
+                <Field
+                  label='Discharge criteria'
+                  placeholder='Criteria'
+                  name='discharge.criteria'
+                  component={TextField}
+                  validate={Validator.required}
+                />
+              </>
+            )}
+            {values.type === Type.OccupationalHealthcare && (
+              <>
+                <Field
+                  label='Employer name'
+                  placeholder='Employer name'
+                  name='employerName'
+                  component={TextField}
+                  validate={Validator.required}
+                />
+                <Field
+                  label='Sickleave start date'
+                  placeholder='YYYY-MM-DD'
+                  name='sickLeave.startDate'
+                  component={TextField}
+                  validate={Validator.date}
+                />
+                <Field
+                  label='Sickleave end date'
+                  placeholder='YYYY-MM-DD'
+                  name='sickLeave.endDate'
+                  component={TextField}
+                  validate={Validator.date}
+                />
+              </>
+            )}
             <Grid>
               <Grid.Column floated='left' width={5}>
                 <Button type='button' onClick={onCancel} color='red'>
